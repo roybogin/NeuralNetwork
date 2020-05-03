@@ -1,6 +1,6 @@
 from Networks.neural_network import NeuralNetwork
 from typing import List
-from losses import MSE
+from losses import SSE
 from activation import Activation, Relu, Linear
 from env import SocketEnv
 import numpy as np
@@ -37,9 +37,8 @@ class DDQN:
         for i in range(self.batch_size):
             prediction_list.append(prediction[i][actions[i]])
             prediction[i][actions[i]] = actual_values[i]
-        self.model.train(states, prediction)
-        loss = np.mean(MSE.calculate(np.array(prediction_list), np.array(actual_values)))
-        print(loss)
+        self.model.train_ddqn(states, prediction)
+        loss = SSE.calculate(np.array(prediction_list), np.array(actual_values))
         return loss
 
     def get_action(self, states, epsilon):
@@ -80,8 +79,8 @@ def play_game(env, TrainNet, TargetNet, epsilon, copy_step):
         exp = {'s': prev_observations, 'a': action, 'r': reward, 's2': observations, 'done': done}
         TrainNet.add_experience(exp)
         loss = TrainNet.train(TargetNet)
-        if isinstance(loss, int):
-            losses.append(loss)
+        if isinstance(loss, np.ndarray):
+            losses.append(np.mean(loss))
         else:
             losses.append(loss)
 
@@ -122,7 +121,7 @@ def main():
     total_rewards = np.empty(N)
     with open("saved_data/epsilon.txt", "r") as f:
         data = f.read()
-        epsilon = float(data)
+        epsilon = 1#float(data)
     decay = 0.9999
     min_epsilon = 0.05
     try:
@@ -144,8 +143,9 @@ def main():
                     f.write(str(epsilon))
         env.close()
 
-    except ConnectionError:
+    except:
         pass
+
 
     print("avg reward for last 100 episodes:", avg_rewards)
 
