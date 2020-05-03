@@ -1,6 +1,6 @@
 from typing import List
 from activation import Activation, Sigmoid
-from losses import MSE
+from losses import SSE
 import numpy as np
 
 
@@ -11,6 +11,7 @@ class NeuralNetwork:
         self.biases = []  # bias arrays for each layer: biases[n] is biases for n+1 layer
         self.activations = activations
         self.lr = lr
+        self.layers_numbers = layers_num
         for i in range(len(layers_num) - 1):
             self.layer_weights.append(np.random.rand(layers_num[i], layers_num[i + 1]))
             self.biases.append(np.random.rand(layers_num[i+1]))
@@ -21,33 +22,38 @@ class NeuralNetwork:
             data = self.activations[i].calculate(data)
         return data
 
-    def train(self, data: np.ndarray, labels: np.ndarray):
-        layer_inputs = []
+    def train_vanish_grad(self, data: np.ndarray, labels: np.ndarray):
+        layer_output = []
         for i in range(len(self.layer_weights)):
-            layer_inputs.append(data)
+            layer_output.append(data)
             data = data.dot(self.layer_weights[i]) + self.biases[i]
             data = self.activations[i].calculate(data)
         # data is output now
 
-        error_deriv = MSE.derivative(data, labels)
+        error_deriv = SSE.derivative(data, labels)
         deltas = [self.activations[-1].derivative(data) * error_deriv]
         for i in range(len(self.layer_weights) - 1, 0, -1):
-            deltas.append(self.activations[i].derivative(layer_inputs[i]) * np.dot(deltas[-1], self.layer_weights[i].T))
+            deltas.append(self.activations[i].derivative(layer_output[i]) * np.dot(deltas[-1], self.layer_weights[i].T))
 
         deltas.reverse()
         for i in range(len(deltas)):
-            self.layer_weights[i] = self.layer_weights[i] + self.lr * np.dot(layer_inputs[i].T, deltas[i])
-            self.biases[i] = self.biases[i] + np.sum(deltas[i], axis=0)
+            self.layer_weights[i] = self.layer_weights[i] - self.lr * np.sign(np.dot(layer_output[i].T, deltas[i]))
+            self.biases[i] = self.biases[i] - self.lr * np.sign(np.sum(deltas[i], axis=0))
 
-def main():
-    nn = NeuralNetwork((2, 4, 1), [Sigmoid, Sigmoid], lr=1.0)
-    data = np.array([[0, 0],
-                     [0, 1],
-                     [1, 0]]).astype(float)
-    label = np.array([[0, 1, 1]]).T.astype(float)
-    print(nn.predict(data))
-    for i in range(10000):
-        nn.train(data, label)
+    def train(self, data: np.ndarray, labels: np.ndarray):
+        layer_output = []
+        for i in range(len(self.layer_weights)):
+            layer_output.append(data)
+            data = data.dot(self.layer_weights[i]) + self.biases[i]
+            data = self.activations[i].calculate(data)
+        # data is output now
 
-if __name__ == '__main__':
-    main()
+        error_deriv = SSE.derivative(data, labels)
+        deltas = [self.activations[-1].derivative(data) * error_deriv]
+        for i in range(len(self.layer_weights) - 1, 0, -1):
+            deltas.append(self.activations[i].derivative(layer_output[i]) * np.dot(deltas[-1], self.layer_weights[i].T))
+
+        deltas.reverse()
+        for i in range(len(deltas)):
+            self.layer_weights[i] = self.layer_weights[i] - self.lr * np.dot(layer_output[i].T, deltas[i])
+            self.biases[i] = self.biases[i] - self.lr * np.sum(deltas[i], axis=0)

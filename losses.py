@@ -2,7 +2,7 @@ import abc
 import numpy as np
 import warnings
 
-warnings.simplefilter('error')
+#warnings.simplefilter('error')
 class Loss(abc.ABC):
     @staticmethod
     @abc.abstractmethod
@@ -15,18 +15,11 @@ class Loss(abc.ABC):
         pass
 
 
-class MSE(Loss):
+class SSE(Loss):
     @staticmethod
     def calculate(output: np.ndarray, labels: np.ndarray):
-        try:
-            return (labels - output) ** 2
-        except:
-            pass
+        return (labels - output) ** 2
 
     @staticmethod
     def derivative(output: np.ndarray, labels: np.ndarray):
-        try:
-            x = 2 * (labels - output)
-        except:
-            pass
-        return x
+        return output - labels

@@ -37,7 +37,7 @@ class DDQN:
         for i in range(self.batch_size):
             prediction_list.append(prediction[i][actions[i]])
             prediction[i][actions[i]] = actual_values[i]
-        self.model.train_ddqn(states, prediction)
+        self.model.train_vanish_grad(states, prediction)
         loss = SSE.calculate(np.array(prediction_list), np.array(actual_values))
         return loss
 
@@ -109,8 +109,8 @@ def main():
     TrainNet = DDQN(num_states, num_actions, hidden_units, [Relu, Linear], gamma, max_experiences, min_experiences, batch_size, lr)
     TargetNet = copy.deepcopy(TrainNet)
 
-    #TargetNet.model.load_weights("saved_data/cp.ckpt")
-    #TrainNet.model.load_weights("saved_data/cp.ckpt")
+    #TargetNet loadweights
+    #TrainNet loadweights
 
     episode_list = []
     avg_rwd_list = []
@@ -138,7 +138,7 @@ def main():
                 avg_rwd_list.append(avg_rewards)
                 losses_list.append(losses)
                 wins = 0
-                #TargetNet.model.save_weights("saved_data/cp.ckpt")
+                #TargetNet save_weights
                 with open("saved_data/epsilon.txt", "w") as f:
                     f.write(str(epsilon))
         env.close()
@@ -159,7 +159,7 @@ def main():
     ax3.plot(episode_list, win_list)
     ax3.set(xlabel="episode", ylabel="wins last 100")
     plt.show()
-    #TargetNet.model.save_weights("saved_data/cp.ckpt")
+    # TargetNet save_weights
 
     with open("saved_data/epsilon.txt", "w") as f:
         f.write(str(epsilon))
