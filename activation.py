@@ -1,6 +1,8 @@
 import abc
 import numpy as np
+import warnings
 
+warnings.simplefilter("error")
 
 class Activation(abc.ABC):
     @staticmethod
@@ -17,7 +19,10 @@ class Activation(abc.ABC):
 class Sigmoid(Activation):
     @staticmethod
     def calculate(x):
-        return 1/(1 + np.exp(-x))
+        try:
+            return 1/(1 + np.exp(-x))
+        except:
+            pass
 
     @staticmethod
     def derivative(x):

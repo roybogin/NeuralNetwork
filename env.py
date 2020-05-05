@@ -60,11 +60,9 @@ class SocketEnv:
         arr = recv.split("#")
         observation = np.fromstring(arr[0], sep=", ")
         reward = int(arr[1])
-        if arr[2] == "true":
-            done = True
-        else:
-            done = False
-        return observation, reward, done, "info"
+        done = arr[2] == "true"
+        did_win = arr[3] == "true"
+        return observation, reward, done, did_win
 
     def close(self):
         self.sock.send("close")
