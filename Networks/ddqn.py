@@ -1,5 +1,5 @@
 from Networks.neural_network import NeuralNetwork
-import numpy as np
+import cupy as np
 from typing import List, Callable
 from activation import Activation
 from losses import Loss

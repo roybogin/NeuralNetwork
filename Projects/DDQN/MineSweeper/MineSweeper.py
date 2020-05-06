@@ -2,7 +2,7 @@ from Networks.ddqn import DDQN, play_game
 from losses import MSE
 from activation import Relu, Linear, Sigmoid, Tanh
 from env import SocketEnv
-import numpy as np
+import cupy as np
 import matplotlib.pyplot as plt
 import copy
 import datetime

@@ -1,6 +1,6 @@
 import abc
 import socket
-import numpy as np
+import cupy as np
 
 
 class Env(abc.ABC):
