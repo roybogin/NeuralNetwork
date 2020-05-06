@@ -1,5 +1,5 @@
 from Networks.neural_network import NeuralNetwork
-import cupy as np
+import numpy as np
 from typing import List, Callable
 from activation import Activation
 from losses import Loss
@@ -26,11 +26,11 @@ class DDQN:
         if len(self.experience['s']) < self.min_experiences:
             return 0
         ids = np.random.randint(low=0, high=len(self.experience['s']), size=self.batch_size)
-        states = np.asarray([self.experience['s'][i] for i in ids])
-        actions = np.asarray([self.experience['a'][i] for i in ids])
-        rewards = np.asarray([self.experience['r'][i] for i in ids])
-        states_next = np.asarray([self.experience['s2'][i] for i in ids])
-        dones = np.asarray([self.experience['done'][i] for i in ids])
+        states = np.asarray([self.experience['s'][int(i)] for i in ids], dtype=np.int16)
+        actions = np.asarray([self.experience['a'][int(i)] for i in ids], dtype=np.int16)
+        rewards = np.asarray([self.experience['r'][int(i)] for i in ids], dtype=np.int16)
+        states_next = np.asarray([self.experience['s2'][int(i)] for i in ids], dtype=np.int16)
+        dones = np.asarray([self.experience['done'][int(i)] for i in ids])
         value_next = np.max(target_net.predict(states_next), axis=1)
         actual_values = np.where(dones, rewards, rewards+self.gamma*value_next)
         prediction = self.predict(states)
@@ -40,12 +40,12 @@ class DDQN:
             prediction[i][actions[i]] = actual_values[i]
         self.model.train(states, prediction)
         loss = self.loss_function.calculate(np.array(prediction_list), np.array(actual_values))
-        return mean(loss)
+        return np.mean(loss)
 
     def get_legal_action(self, states: np.ndarray, epsilon: float, is_legal_move: Callable):
         if np.random.random() < epsilon:
             legal_moves = np.array(list(filter(lambda x: is_legal_move(states, x), range(self.num_actions))))
-            return np.random.choice(legal_moves)
+            return np.random.choice(legal_moves, size=1)[0]
         else:
             prediction = self.predict(np.atleast_2d(states))
             action = np.argmax(prediction)
@@ -56,7 +56,7 @@ class DDQN:
 
     def get_action(self, states: np.ndarray, epsilon: float):
         if np.random.random() < epsilon:
-            return np.random.choice(self.num_actions)
+            return np.random.choice(self.num_actions, size=1)[0]
         else:
             prediction = self.predict(np.atleast_2d(states))
             return np.argmax(prediction)[0]
@@ -75,8 +75,8 @@ class DDQN:
         return False
 
     def copy_weights(self, train_net):
-        self.model.layer_weights = np.copy(train_net.model.layer_weights)
-        self.model.biases = np.copy(train_net.model.biases)
+        self.model.layer_weights = train_net.model.layer_weights.copy()
+        self.model.biases = train_net.model.biases.copy()
 
 
 def play_game(env: Env, train_net: DDQN, target_net: DDQN, epsilon: float, copy_step: int, wins: int, is_legal_move=None, info=lambda: None):
@@ -104,4 +104,4 @@ def play_game(env: Env, train_net: DDQN, target_net: DDQN, epsilon: float, copy_
         iter += 1
         if iter % copy_step == 0:
             target_net.copy_weights(train_net)
-    return rewards, mean(losses), wins, observations
+    return rewards, np.mean(np.array(losses, dtype=np.float64)), wins, observations

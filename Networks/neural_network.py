@@ -1,7 +1,7 @@
 from typing import List
 from activation import Activation, Sigmoid, Tanh
 from losses import Loss, MSE
-import cupy as np
+import numpy as np
 
 
 class NeuralNetwork:

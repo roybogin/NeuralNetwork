@@ -2,7 +2,7 @@ from Networks.ddqn import DDQN, play_game
 from losses import MSE
 from activation import Relu, Linear, Sigmoid, Tanh
 from env import SocketEnv
-import cupy as np
+import numpy as np
 import matplotlib.pyplot as plt
 import copy
 import datetime
@@ -29,7 +29,7 @@ def main():
     calculation_step = 400
     runs_number = int(2e6)
     train_from_start = True
-    estimate_time = False
+    estimate_time = True
 
     train_net = DDQN(layers, [Sigmoid, Linear], MSE, gamma, max_experiences, min_experiences, batch_size, lr)
     if not train_from_start:

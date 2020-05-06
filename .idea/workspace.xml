@@ -2,20 +2,29 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6d0b49b1-19ae-4297-97c2-265ff0468499" name="Default" comment="adding code">
+<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/Networks/ddqn.py" beforeDir="false" afterPath="$PROJECT_DIR$/Networks/ddqn.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Networks/neural_network.py" beforeDir="false" afterPath="$PROJECT_DIR$/Networks/neural_network.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/MineSweeper.py" beforeDir="false" afterPath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/MineSweeper.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/activation.py" beforeDir="false" afterPath="$PROJECT_DIR$/activation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/env.py" beforeDir="false" afterPath="$PROJECT_DIR$/env.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/losses.py" beforeDir="false" afterPath="$PROJECT_DIR$/losses.py" afterDir="false" />
+=======
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/NeuralNetwork.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/NeuralNetwork.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/MineSweeper.py" beforeDir="false" afterPath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/MineSweeper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/epsilon.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/epsilon.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/weights_4by4_sig_gam001.npy" beforeDir="false" afterPath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/weights_4by4_sig_gam001.npy" afterDir="false" />
+>>>>>>> Stashed changes
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
-    <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+<<<<<<< Updated upstream
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="neural_network.py" pinned="false" current-in-tab="false">
@@ -74,6 +83,8 @@
       </file>
     </leaf>
   </component>
+=======
+>>>>>>> Stashed changes
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -117,6 +128,7 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+<<<<<<< Updated upstream
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
@@ -142,33 +154,19 @@
     <option name="width" value="1429" />
     <option name="height" value="1060" />
   </component>
+=======
+  <component name="ProjectId" id="1bY19fIuM1zlkIa8yb1pl5t9mOI" />
+>>>>>>> Stashed changes
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
-  <component name="ProjectView">
-    <navigator proportions="" version="1">
-      <foldersAlwaysOnTop value="true" />
-    </navigator>
-    <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="NeuralNetwork" type="b2602c69:ProjectViewProjectNode" />
-              <item name="NeuralNetwork" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="NeuralNetwork" type="b2602c69:ProjectViewProjectNode" />
-              <item name="NeuralNetwork" type="462c0819:PsiDirectoryNode" />
-              <item name="Networks" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scope" />
-    </panes>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SearchEverywhereHistoryKey" value="console&#9;ACTION&#9;com.jetbrains.python.console.RunPythonConsoleAction" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
@@ -181,18 +179,6 @@
       <recent name="C:\Users\roybo\Desktop\NeuralNetwork\Examples" />
       <recent name="C:\Users\roybo\Desktop\NeuralNetwork\Networks" />
     </key>
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
   </component>
   <component name="RunManager" selected="Python.MineSweeper">
     <configuration name="MineSweeper" type="PythonConfigurationType" factoryName="Python" temporary="true">
@@ -207,11 +193,15 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Projects/DDQN/MineSweeper/MineSweeper.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="true" />
       <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
     </configuration>
     <configuration name="neural_network" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="NeuralNetwork" />
@@ -225,11 +215,15 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Networks/neural_network.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
     </configuration>
     <list>
       <item itemvalue="Python.MineSweeper" />
@@ -252,35 +246,34 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1588414794597</updated>
+      <workItem from="1588794064253" duration="420000" />
     </task>
     <servers />
   </component>
-  <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
-    <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15625" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.28551725" />
-      <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info anchor="bottom" id="Python Console" order="7" weight="0.32965517" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Terminal" order="7" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.3986207" />
-      <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection Results" order="7" weight="0.32965517" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32949308" />
-    </layout>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
   </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
+  <component name="WindowStateProjectService">
+    <state width="1877" height="226" key="GridCell.Tab.0.bottom" timestamp="1588794534652">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="226" key="GridCell.Tab.0.bottom/0.0.1920.1040/-365.-1080.1280.680@0.0.1920.1040" timestamp="1588794534652" />
+    <state width="1877" height="226" key="GridCell.Tab.0.center" timestamp="1588794534651">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="226" key="GridCell.Tab.0.center/0.0.1920.1040/-365.-1080.1280.680@0.0.1920.1040" timestamp="1588794534651" />
+    <state width="1877" height="226" key="GridCell.Tab.0.left" timestamp="1588794534651">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="226" key="GridCell.Tab.0.left/0.0.1920.1040/-365.-1080.1280.680@0.0.1920.1040" timestamp="1588794534651" />
+    <state width="1877" height="226" key="GridCell.Tab.0.right" timestamp="1588794534651">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="226" key="GridCell.Tab.0.right/0.0.1920.1040/-365.-1080.1280.680@0.0.1920.1040" timestamp="1588794534651" />
+    <state x="472" y="163" key="SettingsEditor" timestamp="1588794071269">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="472" y="163" key="SettingsEditor/0.0.1920.1040/-365.-1080.1280.680@0.0.1920.1040" timestamp="1588794071269" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -291,7 +284,6 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="166" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
@@ -303,6 +295,9 @@
         <watch expression="np.min(x)" language="Python" />
       </configuration>
     </watches-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/NeuralNetwork$MineSweeper.coverage" NAME="MineSweeper Coverage Results" MODIFIED="1588794534641" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Projects/DDQN/MineSweeper" />
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="watch">
@@ -370,6 +365,7 @@
       </expression>
     </expressions>
   </component>
+<<<<<<< Updated upstream
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/Networks/neural_network.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -672,4 +668,6 @@
       </provider>
     </entry>
   </component>
+=======
+>>>>>>> Stashed changes
 </project>
