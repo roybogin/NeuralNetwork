@@ -1,5 +1,5 @@
 from typing import List
-from activation import Activation, Sigmoid
+from activation import Activation, Sigmoid, Tanh
 from losses import Loss, MSE
 import numpy as np
 
@@ -68,14 +68,14 @@ class NeuralNetwork:
 
 
 def main():
-    nn = NeuralNetwork([2, 4, 1], [Sigmoid, Sigmoid], MSE, 1)
+    nn = NeuralNetwork([2, 4, 1], [Tanh, Tanh], MSE, 1)
     data = np.array([
         [0, 0],
         [1, 0],
         [0, 1],
         [1, 1]
     ])
-    labels = np.array([[0, 1, 1, 0]]).T
+    labels = np.array([[-1, 1, 1, -1]]).T
     print(nn.predict(data))
     for i in range(10000):
         nn.train(data, labels)

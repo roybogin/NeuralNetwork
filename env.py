@@ -66,3 +66,4 @@ class SocketEnv:
 
     def close(self):
         self.sock.send("close")
+        self.sock.sock.close()

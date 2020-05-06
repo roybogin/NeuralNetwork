@@ -1,6 +1,6 @@
 from Networks.neural_network import NeuralNetwork
 import numpy as np
-from typing import List
+from typing import List, Callable
 from activation import Activation
 from losses import Loss
 from statistics import mean
@@ -38,15 +38,28 @@ class DDQN:
         for i in range(self.batch_size):
             prediction_list.append(prediction[i][actions[i]])
             prediction[i][actions[i]] = actual_values[i]
-        self.model.train_vanish_grad(states, prediction)
+        self.model.train(states, prediction)
         loss = self.loss_function.calculate(np.array(prediction_list), np.array(actual_values))
         return mean(loss)
+
+    def get_legal_action(self, states: np.ndarray, epsilon: float, is_legal_move: Callable):
+        if np.random.random() < epsilon:
+            legal_moves = np.array(list(filter(lambda x: is_legal_move(states, x), range(self.num_actions))))
+            return np.random.choice(legal_moves)
+        else:
+            prediction = self.predict(np.atleast_2d(states))
+            action = np.argmax(prediction)
+            while not is_legal_move(states, action):
+                prediction[0][action] = -float("Inf")
+                action = np.argmax(prediction)
+            return action
 
     def get_action(self, states: np.ndarray, epsilon: float):
         if np.random.random() < epsilon:
             return np.random.choice(self.num_actions)
         else:
-            return np.argmax(self.predict(np.atleast_2d(states))[0])
+            prediction = self.predict(np.atleast_2d(states))
+            return np.argmax(prediction)[0]
 
     def add_experience(self, exp: dict):
         if len(self.experience['s']) >= self.max_experiences:
@@ -55,19 +68,28 @@ class DDQN:
         for key, value in exp.items():
             self.experience[key].append(value)
 
+    def is_experience_in(self, state: np.ndarray, action: int):
+        for i, act in enumerate(self.experience['a']):
+            if act == action and all(state == self.experience['s'][i]):
+                return True
+        return False
+
     def copy_weights(self, train_net):
         self.model.layer_weights = np.copy(train_net.model.layer_weights)
         self.model.biases = np.copy(train_net.model.biases)
 
 
-def play_game(env: Env, train_net: DDQN, target_net: DDQN, epsilon: float, copy_step: int, wins: int):
+def play_game(env: Env, train_net: DDQN, target_net: DDQN, epsilon: float, copy_step: int, wins: int, is_legal_move=None, info=lambda: None):
     rewards = 0
     iter = 0
     done = False
     observations = env.reset()
     losses = list()
     while not done:
-        action = train_net.get_action(observations, epsilon)
+        if is_legal_move is None:
+            action = train_net.get_action(observations, epsilon)
+        else:
+            action = train_net.get_legal_action(observations, epsilon, is_legal_move)
         prev_observations = observations
         observations, reward, done, did_win = env.step(action)
         if did_win:
@@ -82,4 +104,4 @@ def play_game(env: Env, train_net: DDQN, target_net: DDQN, epsilon: float, copy_
         iter += 1
         if iter % copy_step == 0:
             target_net.copy_weights(train_net)
-    return rewards, mean(losses), wins
+    return rewards, mean(losses), wins, observations
