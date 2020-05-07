@@ -44,7 +44,7 @@ class SocketEnv:
 
     def reset(self):
         self.sock.send("reset")
-        return np.fromstring(self.sock.recv(), sep=", ")
+        return np.fromstring(self.sock.recv(), sep=", ", dtype=np.int16)
 
     def input_num(self):
         self.sock.send("input_num")
@@ -58,7 +58,7 @@ class SocketEnv:
         self.sock.send("step " + str(action))
         recv = self.sock.recv()
         arr = recv.split("#")
-        observation = np.fromstring(arr[0], sep=", ")
+        observation = np.fromstring(arr[0], sep=", ", dtype=np.int16)
         reward = int(arr[1])
         done = arr[2] == "true"
         did_win = arr[3] == "true"

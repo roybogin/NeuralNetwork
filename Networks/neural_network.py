@@ -1,10 +1,11 @@
+from network_model import NetworkModel
 from typing import List
 from activation import Activation, Sigmoid, Tanh
 from losses import Loss, MSE
 import numpy as np
 
 
-class NeuralNetwork:
+class NeuralNetwork(NetworkModel):
     def __init__(self, layers_num: List[int], activations: List[Activation], loss_func: Loss, lr: float, min_init_weight=-0.5, max_init_weight=0.5):
         self.layer_weights = []  # weight arrays for each layer: weights[n] is weights between n and n+1 layer
         self.biases = []  # bias arrays for each layer: biases[n] is biases for n+1 layer

@@ -1,14 +1,45 @@
-from Networks.ddqn import DDQN, play_game
+from Networks.ddqn import DDQN
+from Networks.neural_network import NeuralNetwork
 from losses import MSE
 from activation import Relu, Linear, Sigmoid, Tanh
-from env import SocketEnv
+from env import SocketEnv, Env
 import numpy as np
 import matplotlib.pyplot as plt
 import copy
 import datetime
+from statistics import mean
+import pickle as pkl
 
 
 wins = 0
+
+
+def play_game(env: Env, train_net: DDQN, target_net: DDQN, epsilon: float, copy_step: int, wins: int, is_legal_move=None, info=lambda: None):
+    rewards = 0
+    iter = 0
+    done = False
+    observations = env.reset()
+    losses = list()
+    while not done:
+        if is_legal_move is None:
+            action = train_net.get_action(observations, epsilon)
+        else:
+            action = train_net.get_legal_action(observations, epsilon, is_legal_move)
+        prev_observations = observations
+        observations, reward, done, did_win = env.step(action)
+        if did_win:
+            wins += 1
+        rewards += reward
+        if done:
+            env.reset()
+        exp = {'s': prev_observations, 'a': action, 'r': reward, 's2': observations, 'done': done}
+        train_net.add_experience(exp)
+        loss = train_net.train(target_net)
+        losses.append(loss)
+        iter += 1
+        if iter % copy_step == 0:
+            target_net.copy_weights(train_net)
+    return rewards, mean(losses), wins, observations
 
 
 def main():
@@ -16,24 +47,25 @@ def main():
     host = "127.0.0.1"
     port = 2000
     env = SocketEnv(host, port)
-    saving_path = "saved_data"
-    weights_file = "weights_4by4_sig_gam001.npy"  # "weights.npy"
-    bias_file = "weights_4by4_sig_gam001.npy"  # "biases.npy"
-    gamma = 0.01
+    folder_name = "sigmoid"
+    saving_path = "saved_data/" + folder_name
+    gamma = 0
     copy_step = 10
+    loss_function = MSE
     layers = [env.input_num(), 64, env.action_num()]
     max_experiences = 10000
     min_experiences = 100
     batch_size = 32
     lr = 0.05
-    calculation_step = 400
-    runs_number = int(2e6)
+    calculation_step = 1000
+    monitoring_step = 200
+    runs_number = int(5e6)
     train_from_start = True
-    estimate_time = False
+    estimate_time = True
 
-    train_net = DDQN(layers, [Sigmoid, Linear], MSE, gamma, max_experiences, min_experiences, batch_size, lr)
+    train_net = DDQN(NeuralNetwork(layers, [Sigmoid, Linear], loss_function, lr), layers,  loss_function, gamma, max_experiences, min_experiences, batch_size)
     if not train_from_start:
-        train_net.model.load_weights(saving_path, weights_file, bias_file)
+        train_net.model.load_weights(saving_path, "weights", "biases")
     target_net = copy.deepcopy(train_net)
 
     episode_list = []
@@ -68,30 +100,32 @@ def main():
                 avg_rewards = total_rewards[max(0, n - calculation_step):(n + 1)].mean()
                 avg_losses = total_losses[max(0, n - calculation_step):(n + 1)].mean()
                 avg_reveal_percents = total_reveal_percent[max(0, n - calculation_step):(n + 1)].mean()
-                if not estimate_time:
-                    print("episode:", n, "episode reward:", total_reward, "eps:", epsilon, "avg reward (last",
-                          str(calculation_step) + "):", avg_rewards,
-                          "avg loss (last", str(calculation_step) + "):", avg_losses, "last", calculation_step,
-                          "episodes wins: ", wins, "avg revealed percent:", avg_reveal_percents)
                 win_list.append(wins)
                 reveal_list.append(avg_reveal_percents)
                 episode_list.append(n)
                 avg_rwd_list.append(avg_rewards)
                 losses_list.append(avg_losses)
                 wins = 0
-                target_net.model.save_weights(saving_path, weights_file, bias_file)
+                target_net.model.save_weights(saving_path, "weights", "biases")
                 with open(saving_path + "/epsilon.txt", "w") as f:
                     f.write(str(epsilon))
+            if n % monitoring_step == 0:
+                if not estimate_time:
+                    print("episode:", n, "episode reward:", total_reward, "eps:", epsilon, "avg reward (last",
+                          str(calculation_step) + "):", avg_rewards,
+                          "avg loss (last", str(calculation_step) + "):", avg_losses, "last", calculation_step,
+                          "episodes wins: ", wins, "avg revealed percent:", avg_reveal_percents)
+
         env.close()
 
-    except ConnectionError:
+    except:
         pass
 
 
     print("avg reward for last", calculation_step, "episodes:", avg_rewards)
-    print("total win percent", (np.sum(np.array(win_list)))/runs_number)
+    print("total win percent", (np.sum(np.array(win_list)))/n)
 
-    _, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2)
+    fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2)
     ax1.plot(episode_list, avg_rwd_list)
     ax1.set(xlabel="episode", ylabel="avg reward last " + str(calculation_step))
 
@@ -104,7 +138,7 @@ def main():
     ax4.plot(episode_list, reveal_list)
     ax4.set(xlabel="episode", ylabel="avg percent board last" + str(calculation_step))
 
-    target_net.model.save_weights(saving_path, weights_file, bias_file)
+    target_net.model.save_weights(saving_path, "weights", "biases")
 
     with open(saving_path + "/epsilon.txt", "w") as f:
         f.write(str(epsilon))
@@ -121,6 +155,7 @@ def main():
     with open(saving_path + "/reveals.txt", "w") as f:
         f.write(str(reveal_list))
 
+    pkl.dump(fig, open(saving_path + "/plot.p", 'wb'))
     plt.show()
 
 
