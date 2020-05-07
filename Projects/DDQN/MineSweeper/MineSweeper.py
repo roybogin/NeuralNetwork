@@ -19,7 +19,7 @@ def main():
     saving_path = "saved_data"
     weights_file = "weights_4by4_sig_gam001.npy"  # "weights.npy"
     bias_file = "weights_4by4_sig_gam001.npy"  # "biases.npy"
-    gamma = 0.01
+    gamma = 0.0
     copy_step = 10
     layers = [env.input_num(), 64, env.action_num()]
     max_experiences = 10000
