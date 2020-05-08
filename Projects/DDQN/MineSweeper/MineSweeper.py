@@ -9,6 +9,7 @@ import copy
 import datetime
 from statistics import mean
 import pickle as pkl
+import glob
 
 
 wins = 0
@@ -47,7 +48,7 @@ def main():
     host = "127.0.0.1"
     port = 2000
     env = SocketEnv(host, port)
-    folder_name = "sigmoid"
+    folder_name = "tanh"
     saving_path = "saved_data/" + folder_name
     gamma = 0
     copy_step = 10
@@ -63,9 +64,9 @@ def main():
     train_from_start = True
     estimate_time = True
 
-    train_net = DDQN(NeuralNetwork(layers, [Sigmoid, Linear], loss_function, lr), layers,  loss_function, gamma, max_experiences, min_experiences, batch_size)
+    train_net = DDQN(NeuralNetwork(layers, [Tanh, Linear], loss_function, lr), layers,  loss_function, gamma, max_experiences, min_experiences, batch_size)
     if not train_from_start:
-        train_net.model.load_weights(saving_path, "weights", "biases")
+        train_net.model.load_weights(saving_path, "weights.npy", "biases.npy")
     target_net = copy.deepcopy(train_net)
 
     episode_list = []
@@ -106,7 +107,7 @@ def main():
                 avg_rwd_list.append(avg_rewards)
                 losses_list.append(avg_losses)
                 wins = 0
-                target_net.model.save_weights(saving_path, "weights", "biases")
+                target_net.model.save_weights(saving_path, "weights.npy", "biases.npy")
                 with open(saving_path + "/epsilon.txt", "w") as f:
                     f.write(str(epsilon))
             if n % monitoring_step == 0:
@@ -138,7 +139,7 @@ def main():
     ax4.plot(episode_list, reveal_list)
     ax4.set(xlabel="episode", ylabel="avg percent board last" + str(calculation_step))
 
-    target_net.model.save_weights(saving_path, "weights", "biases")
+    target_net.model.save_weights(saving_path, "weights.npy", "biases.npy")
 
     with open(saving_path + "/epsilon.txt", "w") as f:
         f.write(str(epsilon))
@@ -155,7 +156,7 @@ def main():
     with open(saving_path + "/reveals.txt", "w") as f:
         f.write(str(reveal_list))
 
-    pkl.dump(fig, open(saving_path + "/plot.p", 'wb'))
+    pkl.dump(fig, open(saving_path + "/plot" + str(len(glob.glob1("saving_path", "*.p"))) + ".p", 'wb'))
     plt.show()
 
 
