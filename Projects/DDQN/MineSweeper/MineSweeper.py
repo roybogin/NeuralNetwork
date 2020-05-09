@@ -48,9 +48,9 @@ def main():
     host = "127.0.0.1"
     port = 2000
     env = SocketEnv(host, port)
-    folder_name = "tanh"
+    folder_name = "sigmoid_gam001"
     saving_path = "saved_data/" + folder_name
-    gamma = 0
+    gamma = 0.01
     copy_step = 10
     loss_function = MSE
     layers = [env.input_num(), 64, env.action_num()]
@@ -64,7 +64,7 @@ def main():
     train_from_start = True
     estimate_time = True
 
-    train_net = DDQN(NeuralNetwork(layers, [Tanh, Linear], loss_function, lr), layers,  loss_function, gamma, max_experiences, min_experiences, batch_size)
+    train_net = DDQN(NeuralNetwork(layers, [Sigmoid, Linear], loss_function, lr), layers,  loss_function, gamma, max_experiences, min_experiences, batch_size)
     if not train_from_start:
         train_net.model.load_weights(saving_path, "weights.npy", "biases.npy")
     target_net = copy.deepcopy(train_net)
