@@ -6,48 +6,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6d0b49b1-19ae-4297-97c2-265ff0468499" name="Default" comment="adding code">
-      <change afterPath="$PROJECT_DIR$/Networks/keras_cnn.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/layer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Networks/ddqn.py" beforeDir="false" afterPath="$PROJECT_DIR$/Networks/ddqn.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Networks/neural_network.py" beforeDir="false" afterPath="$PROJECT_DIR$/Networks/neural_network.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/MineSweeper.py" beforeDir="false" afterPath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/MineSweeper.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/sigmoid/biases.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/sigmoid/epsilon.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/sigmoid/losses.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/sigmoid/plot.p" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/sigmoid/reveals.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/sigmoid/rewards.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/sigmoid/weights.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/sigmoid/wins.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/sigmoid_gam001/biases.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/sigmoid_gam001/epsilon.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/sigmoid_gam001/losses.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/sigmoid_gam001/plot0.p" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/sigmoid_gam001/reveals.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/sigmoid_gam001/rewards.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/sigmoid_gam001/weights.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/sigmoid_gam001/wins.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/tanh/biases.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/tanh/epsilon.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/tanh/losses.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/tanh/plot.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/tanh/plot0.p" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/tanh/reveals.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/tanh/rewards.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/tanh/weights.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/tanh/wins.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/tanh_gam001/biases.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/tanh_gam001/epsilon.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/tanh_gam001/losses.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/tanh_gam001/plot0.p" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/tanh_gam001/reveals.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/tanh_gam001/rewards.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/tanh_gam001/weights.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/tanh_gam001/wins.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/activation.py" beforeDir="false" afterPath="$PROJECT_DIR$/activation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/env.py" beforeDir="false" afterPath="$PROJECT_DIR$/env.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/network_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/network_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/lr_01_batch_700/0/biases.npy" beforeDir="false" afterPath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/lr_01_batch_700/0/biases.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/lr_01_batch_700/0/epsilon.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/lr_01_batch_700/0/epsilon.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/lr_01_batch_700/0/weights.npy" beforeDir="false" afterPath="$PROJECT_DIR$/Projects/DDQN/MineSweeper/saved_data/lr_01_batch_700/0/weights.npy" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -399,7 +360,7 @@
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15625" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.44689655" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.44689655" />
       <window_info anchor="bottom" id="Version Control" order="10" />
       <window_info anchor="bottom" id="Python Console" order="7" weight="0.32965517" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
