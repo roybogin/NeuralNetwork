@@ -1,9 +1,9 @@
 from network_model import NetworkModel
 from typing import List
-from activation import Activation, Sigmoid, Tanh
+from activation import Activation, Sigmoid, Tanh, Linear
 from losses import Loss, MSE
 import numpy as np
-
+from layer import Dense
 
 class NeuralNetwork(NetworkModel):
     def __init__(self, layers_num: List[int], activations: List[Activation], loss_func: Loss, lr: float, min_init_weight=-0.5, max_init_weight=0.5):
@@ -19,45 +19,37 @@ class NeuralNetwork(NetworkModel):
 
     def predict(self, data: np.ndarray):
         for i in range(len(self.layer_weights)):
-            data = data.dot(self.layer_weights[i]) + self.biases[i]
-            data = self.activations[i].calculate(data)
+            data = Dense.feed_forward(data, self.layer_weights[i], self.biases[i], self.activations[i])
         return data
 
     def train_vanish_grad(self, my_input: np.ndarray, labels: np.ndarray):
         data = my_input
-        layer_output = []
+        layer_outputs = []
         for i in range(len(self.layer_weights)):
-            layer_output.append(data)
-            data = data.dot(self.layer_weights[i]) + self.biases[i]
-            data = self.activations[i].calculate(data)
-        # data is output now
+            layer_outputs.append(data)
+            data = Dense.feed_forward(data, self.layer_weights[i], self.biases[i], self.activations[i])
 
-        error_deriv = self.loss_function.derivative(data, labels)
-        deltas = [self.activations[-1].derivative(data) * error_deriv]
-        for i in range(len(self.layer_weights) - 1, 0, -1):
-            deltas.append(self.activations[i].derivative(layer_output[i]) * np.dot(deltas[-1], self.layer_weights[i].T))
-
-        deltas.reverse()
-        for i in range(len(deltas)):
-            self.layer_weights[i] = self.layer_weights[i] - self.lr * np.sign(np.dot(layer_output[i].T, deltas[i]))
-            self.biases[i] = self.biases[i] - self.lr * np.sign(np.sum(deltas[i], axis=0))
+        for i in range(len(self.layer_weights), 0, -1):
+            if i == len(self.layer_weights):
+                delta = Dense.back_propagate_last_layer(data, labels, self.layer_weights[i - 1], self.biases[i - 1],
+                                                        layer_outputs[i - 1], self.loss_function, self.activations[-1],
+                                                        self.lr, vanish_grad=True)
+            else:
+                delta = Dense.back_propagate(delta, layer_outputs[i], self.layer_weights[i], self.layer_weights[i - 1],
+                                             self.biases[i - 1], layer_outputs[i - 1], self.activations[i - 1], self.lr, vanish_grad=True)
 
     def train(self, my_input: np.ndarray, labels: np.ndarray):
         data = my_input
         layer_outputs = []
         for i in range(len(self.layer_weights)):
             layer_outputs.append(data)
-            data = self.activations[i].calculate(np.dot(data, self.layer_weights[i]) + self.biases[i])
+            data = Dense.feed_forward(data, self.layer_weights[i], self.biases[i], self.activations[i])
 
-        error_deriv = self.loss_function.derivative(data, labels)
-        deltas = [self.activations[-1].derivative(data) * error_deriv]
-        for i in range(len(self.layer_weights) - 1, 0, -1):
-            deltas.append(self.activations[i].derivative(layer_outputs[i]) * np.dot(deltas[-1], self.layer_weights[i].T))
-
-        deltas.reverse()
-        for i in range(len(deltas)):
-            self.layer_weights[i] = self.layer_weights[i] - self.lr * np.dot(layer_outputs[i].T, deltas[i])
-            self.biases[i] = self.biases[i] - self.lr * np.sum(deltas[i], axis=0)
+        for i in range(len(self.layer_weights), 0, -1):
+            if i == len(self.layer_weights):
+                delta = Dense.back_propagate_last_layer(data, labels, self.layer_weights[i-1], self.biases[i-1], layer_outputs[i-1], self.loss_function, self.activations[-1], self.lr)
+            else:
+                delta = Dense.back_propagate(delta, layer_outputs[i], self.layer_weights[i], self.layer_weights[i-1], self.biases[i-1], layer_outputs[i-1], self.activations[i-1], self.lr)
 
     def save_weights(self, path: str, weights_file: str, bias_file: str):
         np.save(path + "/" + weights_file, self.layer_weights, allow_pickle=True)
@@ -69,7 +61,7 @@ class NeuralNetwork(NetworkModel):
 
 
 def main():
-    nn = NeuralNetwork([2, 4, 1], [Tanh, Tanh], MSE, 1)
+    nn = NeuralNetwork([2, 4, 1], [Tanh, Tanh], MSE, 0.1)
     data = np.array([
         [0, 0],
         [1, 0],
@@ -78,11 +70,10 @@ def main():
     ])
     labels = np.array([[-1, 1, 1, -1]]).T
     print(nn.predict(data))
-    for i in range(10000):
+    for i in range(20000):
         nn.train(data, labels)
     print(nn.predict(data))
 
 
 if __name__ == "__main__":
     main()
-

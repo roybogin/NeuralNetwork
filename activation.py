@@ -10,7 +10,7 @@ class Activation(abc.ABC):
 
     @staticmethod
     @abc.abstractmethod
-    def derivative(x):
+    def derivative(x):  # with respect to function output
         pass
 
 

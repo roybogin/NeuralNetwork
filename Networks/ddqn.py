@@ -73,8 +73,4 @@ class DDQN:
                 return True
         return False
 
-    def copy_weights(self, train_net):
-        self.model.layer_weights = np.copy(train_net.model.layer_weights)
-        self.model.biases = np.copy(train_net.model.biases)
-
 

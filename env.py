@@ -50,6 +50,12 @@ class SocketEnv:
         self.sock.send("input_num")
         return int(self.sock.recv())
 
+    def input_shape(self):
+        self.sock.send("input_shape")
+        recv = self.sock.recv()
+        arr = recv.split("#")
+        return int(arr[0]), int(arr[1])
+
     def action_num(self):
         self.sock.send("action_num")
         return int(self.sock.recv())

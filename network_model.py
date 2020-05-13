@@ -1,6 +1,7 @@
 import abc
 import numpy as np
 
+
 class NetworkModel(abc.ABC):
 
     @abc.abstractmethod
