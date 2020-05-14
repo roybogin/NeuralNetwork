@@ -176,8 +176,7 @@ def play_game(env: Env, train_net: DDQN, target_net: DDQN, epsilon: float, copy_
         losses.append(loss)
         iter += 1
         if iter % copy_step == 0:
-            target_net.model.layer_weights = np.copy(train_net.model.layer_weights)
-            target_net.model.biases = np.copy(train_net.model.biases)
+            target_net.model.layers = copy.deepcopy(train_net.model.layers)
     return rewards, mean(losses), wins, observations
 
 
