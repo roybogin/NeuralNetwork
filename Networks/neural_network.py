@@ -5,59 +5,49 @@ from losses import Loss, MSE
 import numpy as np
 from layer import Dense
 
+
 class NeuralNetwork(NetworkModel):
     def __init__(self, layers_num: List[int], activations: List[Activation], loss_func: Loss, lr: float, min_init_weight=-0.5, max_init_weight=0.5):
-        self.layer_weights = []  # weight arrays for each layer: weights[n] is weights between n and n+1 layer
-        self.biases = []  # bias arrays for each layer: biases[n] is biases for n+1 layer
-        self.activations = activations
+        self.layers = []
+        for i in range(len(layers_num) - 1):
+            self.layers.append(Dense(layers_num[i], layers_num[i+1], activations[i]))
         self.loss_function = loss_func
         self.lr = lr
         self.layers_numbers = layers_num
-        for i in range(len(layers_num) - 1):
-            self.layer_weights.append((max_init_weight - min_init_weight) * np.random.rand(layers_num[i], layers_num[i + 1]) + min_init_weight)
-            self.biases.append((max_init_weight - min_init_weight) * np.random.rand(layers_num[i+1]) + min_init_weight)
 
     def predict(self, data: np.ndarray):
-        for i in range(len(self.layer_weights)):
-            data = Dense.feed_forward(data, self.layer_weights[i], self.biases[i], self.activations[i])
+        for layer in self.layers:
+            data = layer.feed_forward(data)
         return data
 
-    def train_vanish_grad(self, my_input: np.ndarray, labels: np.ndarray):
+    def train(self, my_input: np.ndarray, labels: np.ndarray, vanish_grad=False):
         data = my_input
         layer_outputs = []
-        for i in range(len(self.layer_weights)):
+        for layer in self.layers:
             layer_outputs.append(data)
-            data = Dense.feed_forward(data, self.layer_weights[i], self.biases[i], self.activations[i])
+            data = layer.feed_forward(data)
 
-        for i in range(len(self.layer_weights), 0, -1):
-            if i == len(self.layer_weights):
-                delta = Dense.back_propagate_last_layer(data, labels, self.layer_weights[i - 1], self.biases[i - 1],
-                                                        layer_outputs[i - 1], self.loss_function, self.activations[-1],
-                                                        self.lr, vanish_grad=True)
+        for i in range(len(self.layers), 0, -1):
+            if i == len(self.layers):
+                delta = self.layers[i-1].back_propagate_last_layer(data, labels, layer_outputs[i-1], self.loss_function, self.lr, vanish_grad)
             else:
-                delta = Dense.back_propagate(delta, layer_outputs[i], self.layer_weights[i], self.layer_weights[i - 1],
-                                             self.biases[i - 1], layer_outputs[i - 1], self.activations[i - 1], self.lr, vanish_grad=True)
-
-    def train(self, my_input: np.ndarray, labels: np.ndarray):
-        data = my_input
-        layer_outputs = []
-        for i in range(len(self.layer_weights)):
-            layer_outputs.append(data)
-            data = Dense.feed_forward(data, self.layer_weights[i], self.biases[i], self.activations[i])
-
-        for i in range(len(self.layer_weights), 0, -1):
-            if i == len(self.layer_weights):
-                delta = Dense.back_propagate_last_layer(data, labels, self.layer_weights[i-1], self.biases[i-1], layer_outputs[i-1], self.loss_function, self.activations[-1], self.lr)
-            else:
-                delta = Dense.back_propagate(delta, layer_outputs[i], self.layer_weights[i], self.layer_weights[i-1], self.biases[i-1], layer_outputs[i-1], self.activations[i-1], self.lr)
+                delta = self.layers[i-1].back_propagate(delta, layer_outputs[i], self.layers[i].get_weights(), layer_outputs[i-1], self.lr, vanish_grad)
 
     def save_weights(self, path: str, weights_file: str, bias_file: str):
-        np.save(path + "/" + weights_file, self.layer_weights, allow_pickle=True)
-        np.save(path + "/" + bias_file, self.biases, allow_pickle=True)
+        all_weights = []
+        all_biases = []
+        for layer in self.layers:
+            all_weights.append(layer.get_weights())
+            all_biases.append(layer.get_biases())
+        np.save(path + "/" + weights_file, all_weights, allow_pickle=True)
+        np.save(path + "/" + bias_file, all_biases, allow_pickle=True)
 
     def load_weights(self, path: str, weights_file: str, bias_file: str):
-        self.layer_weights = np.load(path + "/" + weights_file, allow_pickle=True)
-        self.biases = np.load(path + "/" + bias_file, allow_pickle=True)
+        all_weights = np.load(path + "/" + weights_file, allow_pickle=True)
+        all_biases = np.load(path + "/" + bias_file, allow_pickle=True)
+        for layer in range(len(self.layers)):
+            self.layers[layer].set_weights(all_weights[layer])
+            self.layers[layer].set_biases(all_biases[layer])
 
 
 def main():
