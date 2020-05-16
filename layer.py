@@ -46,8 +46,8 @@ class Dense(Layer):
             self.weights -= lr * np.dot(layer_outputs.T, delta)
             self.biases -= lr * np.sum(delta, axis=0)
         else:
-            layer_weights -= lr * np.sign(np.dot(layer_outputs.T, delta))
-            biases -= lr * np.sign(np.sum(delta, axis=0))
+            self.weights -= lr * np.sign(np.dot(layer_outputs.T, delta))
+            self.biases -= lr * np.sign(np.sum(delta, axis=0))
         return delta
 
     def get_weights(self):

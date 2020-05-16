@@ -37,7 +37,7 @@ class DDQN:
         for i in range(self.batch_size):
             prediction_list.append(prediction[i][actions[i]])
             prediction[i][actions[i]] = actual_values[i]
-        self.model.train(states, prediction)
+        self.model.train(states, prediction, vanish_grad=True)
         loss = self.loss_function.calculate(np.array(prediction_list), np.array(actual_values))
         return mean(loss)
 
