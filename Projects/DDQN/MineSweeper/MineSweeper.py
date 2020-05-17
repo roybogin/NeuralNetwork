@@ -1,4 +1,4 @@
-from Networks.ddqn import DDQN
+from Networks.dqn import DQN
 from Networks.neural_network import NeuralNetwork
 from losses import MSE
 from activation import Relu, Linear, Sigmoid, Tanh
@@ -41,7 +41,7 @@ def main():
     train_from_start = False
     estimate_time = True
 
-    train_net = DDQN(NeuralNetwork(layers, [Tanh, Linear], loss_function, lr), layers,  loss_function, gamma, max_experiences, min_experiences, batch_size)
+    train_net = DQN(NeuralNetwork(layers, [Tanh, Linear], loss_function, lr), layers, loss_function, gamma, max_experiences, min_experiences, batch_size)
 
     if dir_num == 0:
         train_from_start = True
@@ -153,7 +153,7 @@ def main():
         plt.show()
 
 
-def play_game(env: Env, train_net: DDQN, target_net: DDQN, epsilon: float, copy_step: int, wins: int, is_legal_move=None, info=lambda: None):
+def play_game(env: Env, train_net: DQN, target_net: DQN, epsilon: float, copy_step: int, wins: int, is_legal_move=None, info=lambda: None):
     rewards = 0
     iter = 0
     done = False

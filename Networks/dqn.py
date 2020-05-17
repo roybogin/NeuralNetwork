@@ -6,7 +6,7 @@ from losses import Loss
 from statistics import mean
 
 
-class DDQN:
+class DQN:
     def __init__(self, model: NetworkModel, layer_nums: List[int], loss_func: Loss, gamma: float, max_experiences: int,
                  min_experiences: int, batch_size: int):
         self.model = model
@@ -66,11 +66,4 @@ class DDQN:
                 self.experience[key].pop(0)
         for key, value in exp.items():
             self.experience[key].append(value)
-
-    def is_experience_in(self, state: np.ndarray, action: int):
-        for i, act in enumerate(self.experience['a']):
-            if act == action and all(state == self.experience['s'][i]):
-                return True
-        return False
-
 
