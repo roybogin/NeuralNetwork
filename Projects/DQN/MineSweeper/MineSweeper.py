@@ -37,7 +37,7 @@ def main():
     lr /= batch_size
     calculation_step = 1000
     monitoring_step = 200
-    runs_number = int(6.5e5)
+    runs_number = int(1e6)
     train_from_start = False
     estimate_time = True
 
