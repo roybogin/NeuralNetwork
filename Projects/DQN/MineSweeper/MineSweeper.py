@@ -124,13 +124,13 @@ def main():
         ax1.set(xlabel="episode", ylabel="avg reward last " + str(calculation_step))
 
         ax2.plot(episode_list, losses_list)
-        ax2.set(xlabel="episode", ylabel="avg loss last" + str(calculation_step))
+        ax2.set(xlabel="episode", ylabel="avg loss last " + str(calculation_step))
 
         ax3.plot(episode_list, win_list)
-        ax3.set(xlabel="episode", ylabel="wins last" + str(calculation_step))
+        ax3.set(xlabel="episode", ylabel="wins last " + str(calculation_step))
 
         ax4.plot(episode_list, reveal_list)
-        ax4.set(xlabel="episode", ylabel="avg percent board last" + str(calculation_step))
+        ax4.set(xlabel="episode", ylabel="avg percent board last " + str(calculation_step))
 
         target_net.model.save_weights(saving_path, "weights.npy", "biases.npy")
 
