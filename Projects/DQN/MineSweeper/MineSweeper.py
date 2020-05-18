@@ -32,12 +32,14 @@ def main():
     layers = [env.input_num(), 64, env.action_num()]
     max_experiences = 20000
     min_experiences = 1000
+    decay = 0.9999
+    min_epsilon = 0.01
     batch_size = 700
     lr = 0.1
     lr /= batch_size
     calculation_step = 1000
     monitoring_step = 200
-    runs_number = int(1e6)
+    runs_number = int(5e5)
     train_from_start = False
     estimate_time = True
 
@@ -65,8 +67,6 @@ def main():
         with open(take_from + "/epsilon.txt", "r") as f:
             data = f.read()
             epsilon = float(data)
-    decay = 0.9999
-    min_epsilon = 0.05
     try:
         if estimate_time:
             start_time = datetime.datetime.now()
