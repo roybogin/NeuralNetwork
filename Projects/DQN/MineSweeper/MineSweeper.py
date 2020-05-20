@@ -20,7 +20,7 @@ def main():
     host = "127.0.0.1"
     port = 2000
     env = SocketEnv(host, port)
-    folder_name = "lr_01_batch_700"
+    folder_name = "two_hidden"
     saving_path = "saved_data/" + folder_name
     dir_num = len([d for d in os.listdir(saving_path) if os.path.isdir(saving_path + "/" + d)])
     take_from = saving_path + "/" + str(dir_num-1)
@@ -29,7 +29,7 @@ def main():
     gamma = 0.01
     copy_step = 10
     loss_function = MSE
-    layers = [env.input_num(), 64, env.action_num()]
+    layers = [env.input_num(), 64, 64, env.action_num()]
     max_experiences = 20000
     min_experiences = 1000
     decay = 0.9999
@@ -43,7 +43,7 @@ def main():
     train_from_start = False
     estimate_time = True
 
-    train_net = DQN(NeuralNetwork(layers, [Tanh, Linear], loss_function, lr), layers, loss_function, gamma, max_experiences, min_experiences, batch_size)
+    train_net = DQN(NeuralNetwork(layers, [Tanh, Tanh, Linear], loss_function, lr), layers, loss_function, gamma, max_experiences, min_experiences, batch_size)
 
     if dir_num == 0:
         train_from_start = True
