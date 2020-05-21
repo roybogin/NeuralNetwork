@@ -1,7 +1,7 @@
 from Networks.dqn import DQN
 from Networks.neural_network import NeuralNetwork
 from losses import MSE
-from activation import Relu, Linear, Sigmoid, Tanh
+from activation import Linear, Tanh
 from env import SocketEnv, Env
 import numpy as np
 import matplotlib.pyplot as plt
@@ -9,7 +9,6 @@ import copy
 import datetime
 from statistics import mean
 import pickle as pkl
-import glob
 import os
 
 wins = 0
@@ -22,30 +21,29 @@ def main():
     env = SocketEnv(host, port)
     folder_name = "two_hidden"
     saving_path = "saved_data/" + folder_name
-    dir_num = len([d for d in os.listdir(saving_path) if os.path.isdir(saving_path + "/" + d)])
-    take_from = saving_path + "/" + str(dir_num-1)
+    dir_num = len([d for d in os.listdir(saving_path) if os.path.isdir(saving_path + "/" + d)])  # number of existing directories (to add another)
+    take_from = saving_path + "/" + str(dir_num-1)  # directory to take data from
     os.mkdir(saving_path + "/" + str(dir_num))
-    saving_path = saving_path + "/" + str(dir_num)
-    gamma = 0.01
-    copy_step = 10
+    saving_path = saving_path + "/" + str(dir_num)  # directory to save data in
+    gamma = 0.01    # DQN gamma
+    copy_step = 10  # step to copy weights between networks
     loss_function = MSE
     layers = [env.input_num(), 64, 64, env.action_num()]
     max_experiences = 20000
     min_experiences = 1000
-    decay = 0.9999
+    decay = 0.9999  # epsilon decay
     min_epsilon = 0.01
     batch_size = 700
-    lr = 0.1
-    lr /= batch_size
-    calculation_step = 1000
-    monitoring_step = 200
-    runs_number = int(5e5)
-    train_from_start = False
-    estimate_time = True
+    lr = 0.01
+    calculation_step = 1000  # step for calculating the data for the plot
+    monitoring_step = 200    # step to show mean data if you want to see on console
+    runs_number = int(5e5)  # how many runs to do
+    train_from_start = False    # training from start or file
+    estimate_time = True    # estimate time to end or show monitoring
 
-    train_net = DQN(NeuralNetwork(layers, [Tanh, Tanh, Linear], loss_function, lr), layers, loss_function, gamma, max_experiences, min_experiences, batch_size)
+    train_net = DQN(NeuralNetwork(layers, [Tanh, Tanh, Linear], loss_function, lr), layers[-1], loss_function, gamma, max_experiences, min_experiences, batch_size)
 
-    if dir_num == 0:
+    if dir_num == 0:    # if there are no data directories you have to train from start
         train_from_start = True
 
     if not train_from_start:
@@ -72,13 +70,14 @@ def main():
             start_time = datetime.datetime.now()
         for n in range(runs_number):
             epsilon = max(min_epsilon, epsilon * decay)
-            total_reward, ep_losses, wins, end_board = play_game(env, train_net, target_net, epsilon, copy_step, wins, is_legal_move=is_legal_move)
+            total_reward, ep_losses, wins, end_board = play_game(env, train_net, target_net, epsilon, copy_step, wins, is_legal_move=is_legal_move) # play a game
             if estimate_time:
                 print("plays percentage: ", str(100 * n/runs_number) + "%   estimated time: ", str(estimate_runtime(n/runs_number, start_time)))
             total_rewards[n] = total_reward
             total_losses[n] = ep_losses
             total_reveal_percent[n] = board_percent_revealed(end_board)
             if n % calculation_step == 0:
+                # calculate data for plot
                 avg_rewards = total_rewards[max(0, n - calculation_step):(n + 1)].mean()
                 avg_losses = total_losses[max(0, n - calculation_step):(n + 1)].mean()
                 avg_reveal_percents = total_reveal_percent[max(0, n - calculation_step):(n + 1)].mean()
@@ -93,6 +92,7 @@ def main():
                     f.write(str(epsilon))
             if n % monitoring_step == 0:
                 if not estimate_time:
+                    # show monitoring
                     avg_rewards = total_rewards[max(0, n - calculation_step):(n + 1)].mean()
                     avg_losses = total_losses[max(0, n - calculation_step):(n + 1)].mean()
                     avg_reveal_percents = total_reveal_percent[max(0, n - calculation_step):(n + 1)].mean()
@@ -103,10 +103,11 @@ def main():
 
         env.close()
 
-    except:
+    except:  # if code is stopped at the middle, still calculate data and show plot
         pass
 
     finally:
+        # calculate end of data
         avg_rewards = total_rewards[max(0, n - calculation_step):(n + 1)].mean()
         avg_losses = total_losses[max(0, n - calculation_step):(n + 1)].mean()
         avg_reveal_percents = total_reveal_percent[max(0, n - calculation_step):(n + 1)].mean()
@@ -119,6 +120,7 @@ def main():
         print("avg reward for last", calculation_step, "episodes:", avg_rewards)
         print("total win percent", (np.sum(np.array(win_list)))/n)
 
+        # plot
         fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2)
         ax1.plot(episode_list, avg_rwd_list)
         ax1.set(xlabel="episode", ylabel="avg reward last " + str(calculation_step))
@@ -160,6 +162,7 @@ def play_game(env: Env, train_net: DQN, target_net: DQN, epsilon: float, copy_st
     observations = env.reset()
     losses = list()
     while not done:
+        # select legal move
         if is_legal_move is None:
             action = train_net.get_action(observations, epsilon)
         else:
@@ -172,21 +175,25 @@ def play_game(env: Env, train_net: DQN, target_net: DQN, epsilon: float, copy_st
         if done:
             env.reset()
         exp = {'s': prev_observations, 'a': action, 'r': reward, 's2': observations, 'done': done}
+        # add experience for replay
         train_net.add_experience(exp)
         loss = train_net.train(target_net)
         losses.append(loss)
         iter += 1
         if iter % copy_step == 0:
+            # copy weights between networks
             target_net.model.layers = copy.deepcopy(train_net.model.layers)
     return rewards, mean(losses), wins, observations
 
 
 def board_percent_revealed(board: np.ndarray):
+    # calculate percent of board that is revealed
     num_revealed = np.sum(((board >= 0) * (board <= 8)))
     return num_revealed/board.size
 
 
 def is_legal_move(state: np.ndarray, action: int):
+    # a move is legal if the panel isn't shown (value of -5)
     return state[action] == -5
 
 
