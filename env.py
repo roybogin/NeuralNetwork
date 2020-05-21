@@ -38,7 +38,7 @@ class MySock:
         return self.sock.recv(1024).decode()
 
 
-class SocketEnv:
+class SocketEnv: #written to work like gym
     def __init__(self, host, port):
         self.sock = MySock(host, port)
 
@@ -46,21 +46,15 @@ class SocketEnv:
         self.sock.send("reset")
         return np.fromstring(self.sock.recv(), sep=", ", dtype=np.int16)
 
-    def input_num(self):
+    def input_num(self):    # number of inputs for NN
         self.sock.send("input_num")
         return int(self.sock.recv())
 
-    def input_shape(self):
-        self.sock.send("input_shape")
-        recv = self.sock.recv()
-        arr = recv.split("#")
-        return int(arr[0]), int(arr[1])
-
-    def action_num(self):
+    def action_num(self):   # number of possible actions (output of NN)
         self.sock.send("action_num")
         return int(self.sock.recv())
 
-    def step(self, action):
+    def step(self, action): # make an action
         self.sock.send("step " + str(action))
         recv = self.sock.recv()
         arr = recv.split("#")
@@ -70,6 +64,6 @@ class SocketEnv:
         did_win = arr[3] == "true"
         return observation, reward, done, did_win
 
-    def close(self):
+    def close(self):    # close the environment
         self.sock.send("close")
         self.sock.sock.close()

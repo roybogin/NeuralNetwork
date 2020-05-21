@@ -37,7 +37,7 @@ def main():
     lr = 0.01
     calculation_step = 1000  # step for calculating the data for the plot
     monitoring_step = 200    # step to show mean data if you want to see on console
-    runs_number = int(5e5)  # how many runs to do
+    runs_number = int(1e6)  # how many runs to do
     train_from_start = False    # training from start or file
     estimate_time = True    # estimate time to end or show monitoring
 

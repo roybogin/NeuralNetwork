@@ -4,17 +4,18 @@ from activation import Activation
 from losses import Loss
 from typing import List
 
+
 class Layer(abc.ABC):
     @abc.abstractmethod
-    def feed_forward():
+    def feed_forward(self):     # feed forward the data
         pass
 
     @abc.abstractmethod
-    def back_propagate():
+    def back_propagate(self):   # back propagate a layer
         pass
 
     @abc.abstractmethod
-    def back_propagate_last_layer():
+    def back_propagate_last_layer(self):    # back propagate the last layer
         pass
 
 
@@ -30,26 +31,21 @@ class Dense(Layer):
         data = self.activation.calculate(data)
         return data
 
-    def back_propagate(self, delta: np.ndarray, next_layer_outputs: np.ndarray, next_layer_weights: np.ndarray, layer_outputs: np.ndarray, lr:float, vanish_grad=False):
+    def back_propagate(self, delta: np.ndarray, next_layer_outputs: np.ndarray, next_layer_weights: np.ndarray, layer_outputs: np.ndarray, lr:float):
         delta = self.activation.derivative(next_layer_outputs) * np.dot(delta, next_layer_weights.T)
-        if not vanish_grad:
-            self.weights -= lr * np.dot(layer_outputs.T, delta)
-            self.biases -= lr * np.sum(delta, axis=0)
-        else:
-            self.weights -= lr * np.sign(np.dot(layer_outputs.T, delta))
-            self.biases -= lr * np.sign(np.sum(delta, axis=0))
+        lr = lr / delta.shape[0]
+        self.weights -= lr * np.dot(layer_outputs.T, delta)
+        self.biases -= lr * np.sum(delta, axis=0)
         return delta
 
-    def back_propagate_last_layer(self, data: np.ndarray, labels: np.ndarray, layer_outputs:np.ndarray, loss_func: Loss, lr: float, vanish_grad=False):
+    def back_propagate_last_layer(self, data: np.ndarray, labels: np.ndarray, layer_outputs:np.ndarray, loss_func: Loss, lr: float):
         delta = self.activation.derivative(data) * loss_func.derivative(data, labels)
-        if not vanish_grad:
-            self.weights -= lr * np.dot(layer_outputs.T, delta)
-            self.biases -= lr * np.sum(delta, axis=0)
-        else:
-            self.weights -= lr * np.sign(np.dot(layer_outputs.T, delta))
-            self.biases -= lr * np.sign(np.sum(delta, axis=0))
+        lr = lr / delta.shape[0]
+        self.weights -= lr * np.dot(layer_outputs.T, delta)
+        self.biases -= lr * np.sum(delta, axis=0)
         return delta
 
+    # getters and setters
     def get_weights(self):
         return self.weights
 
