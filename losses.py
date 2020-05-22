@@ -5,7 +5,7 @@ import numpy as np
 class Loss(abc.ABC):
     @staticmethod
     @abc.abstractmethod
-    def calculate(output: np.ndarray, labels: np.ndarray):  # (batch_size, 1)
+    def calculate(output: np.ndarray, labels: np.ndarray):  # mean over (batch_size, 1)
         pass
 
     @staticmethod
@@ -17,23 +17,18 @@ class Loss(abc.ABC):
 class SSE(Loss):
     @staticmethod
     def calculate(output: np.ndarray, labels: np.ndarray):
-        if len(labels.shape)==1:
-            return np.sum(np.atleast_2d((labels - output)**2), axis=0)
-        return np.sum((labels - output ** 2), axis=0)
+        return np.mean(np.sum((labels - output) ** 2, axis=1))
 
     @staticmethod
     def derivative(output: np.ndarray, labels: np.ndarray):
-        return 2 * (output-labels)
+        return 2 * (output - labels)
 
 
 class MSE(Loss):
     @staticmethod
     def calculate(output: np.ndarray, labels: np.ndarray):
-        if len(labels.shape)==1:
-            return np.mean(np.atleast_2d((labels - output)**2), axis=0)
-        return np.mean((labels - output ** 2), axis=0)
+        return np.mean(np.mean((labels - output) ** 2, axis=1))
 
     @staticmethod
     def derivative(output: np.ndarray, labels: np.ndarray):
-        return 2/len(labels) * (output-labels)
-
+        return 2/labels.shape[1] * (output - labels)
