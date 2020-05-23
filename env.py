@@ -26,11 +26,11 @@ class Env(abc.ABC):
 
 
 class MySock:
-    def __init__(self, host, port):
+    def __init__(self, host: str, port: str):
         self.sock = socket.socket()
         self.sock.connect((host, port))
 
-    def send(self, message):
+    def send(self, message: str):
         if len(message) > 0:
             self.sock.send(message.encode())
 
@@ -39,7 +39,7 @@ class MySock:
 
 
 class SocketEnv: #written to work like gym
-    def __init__(self, host, port):
+    def __init__(self, host: str, port: str):
         self.sock = MySock(host, port)
 
     def reset(self):
@@ -54,7 +54,7 @@ class SocketEnv: #written to work like gym
         self.sock.send("action_num")
         return int(self.sock.recv())
 
-    def step(self, action): # make an action
+    def step(self, action: int): # make an action
         self.sock.send("step " + str(action))
         recv = self.sock.recv()
         arr = recv.split("#")

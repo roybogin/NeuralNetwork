@@ -41,9 +41,9 @@ class DQN:
             prediction[i][actions[i]] = actual_values[i]
         # train training network
         self.model.train(states, prediction)
-        loss = self.loss_function.calculate(np.array(prediction_list), np.array(actual_values))
+        loss = self.loss_function.calculate(np.atleast_2d(np.array(prediction_list)).T, np.atleast_2d(np.array(actual_values)).T)
         # return mean of losses for batch
-        return mean(loss)
+        return loss
 
     def get_legal_action(self, states: np.ndarray, epsilon: float, is_legal_move: Callable):    # get a legal action
         if np.random.random() < epsilon:

@@ -33,14 +33,14 @@ class Dense(Layer):
 
     def back_propagate(self, delta: np.ndarray, next_layer_outputs: np.ndarray, next_layer_weights: np.ndarray, layer_outputs: np.ndarray, lr:float):
         delta = self.activation.derivative(next_layer_outputs) * np.dot(delta, next_layer_weights.T)
-        lr = lr / delta.shape[0]
+        lr = lr / delta.shape[0]    # divide by batch size
         self.weights -= lr * np.dot(layer_outputs.T, delta)
         self.biases -= lr * np.sum(delta, axis=0)
         return delta
 
     def back_propagate_last_layer(self, data: np.ndarray, labels: np.ndarray, layer_outputs:np.ndarray, loss_func: Loss, lr: float):
         delta = self.activation.derivative(data) * loss_func.derivative(data, labels)
-        lr = lr / delta.shape[0]
+        lr = lr / delta.shape[0]    # divide by batch size
         self.weights -= lr * np.dot(layer_outputs.T, delta)
         self.biases -= lr * np.sum(delta, axis=0)
         return delta
@@ -52,8 +52,8 @@ class Dense(Layer):
     def get_biases(self):
         return self.biases
 
-    def set_weights(self, weights):
+    def set_weights(self, weights: np.ndarray):
         self.weights = weights
 
-    def set_biases(self, biases):
+    def set_biases(self, biases: np.ndarray):
         self.biases = biases
