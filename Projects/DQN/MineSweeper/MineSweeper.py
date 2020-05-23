@@ -1,6 +1,6 @@
 from Networks.dqn import DQN
 from Networks.neural_network import NeuralNetwork
-from losses import MSE
+from losses import SSE
 from activation import Linear, Tanh
 from env import SocketEnv, Env
 import numpy as np
@@ -19,7 +19,7 @@ def main():
     host = "127.0.0.1"
     port = 2000
     env = SocketEnv(host, port)
-    folder_name = "two_hidden"
+    folder_name = "two_hidden_new_loss"
     saving_path = "saved_data/" + folder_name
     dir_num = len([d for d in os.listdir(saving_path) if os.path.isdir(saving_path + "/" + d)])  # number of existing directories (to add another)
     take_from = saving_path + "/" + str(dir_num-1)  # directory to take data from
@@ -27,17 +27,17 @@ def main():
     saving_path = saving_path + "/" + str(dir_num)  # directory to save data in
     gamma = 0.01    # DQN gamma
     copy_step = 10  # step to copy weights between networks
-    loss_function = MSE
+    loss_function = SSE
     layers = [env.input_num(), 64, 64, env.action_num()]
     max_experiences = 20000
     min_experiences = 1000
     decay = 0.9999  # epsilon decay
     min_epsilon = 0.01
     batch_size = 700
-    lr = 0.01
+    lr = 0.002
     calculation_step = 1000  # step for calculating the data for the plot
-    monitoring_step = 200    # step to show mean data if you want to see on console
-    runs_number = int(1e6)  # how many runs to do
+    monitoring_step = 20    # step to show info on console
+    runs_number = int(8e5)  # how many runs to do
     train_from_start = False    # training from start or file
     estimate_time = True    # estimate time to end or show monitoring
 
@@ -71,8 +71,6 @@ def main():
         for n in range(runs_number):
             epsilon = max(min_epsilon, epsilon * decay)
             total_reward, ep_losses, wins, end_board = play_game(env, train_net, target_net, epsilon, copy_step, wins, is_legal_move=is_legal_move) # play a game
-            if estimate_time:
-                print("plays percentage: ", str(100 * n/runs_number) + "%   estimated time: ", str(estimate_runtime(n/runs_number, start_time)))
             total_rewards[n] = total_reward
             total_losses[n] = ep_losses
             total_reveal_percent[n] = board_percent_revealed(end_board)
@@ -100,6 +98,9 @@ def main():
                           str(calculation_step) + "):", avg_rewards,
                           "avg loss (last", str(calculation_step) + "):", avg_losses, "last", calculation_step,
                           "episodes wins: ", wins, "avg revealed percent:", avg_reveal_percents)
+                else:
+                    print("plays percentage: ", str(100 * n / runs_number) + "%   estimated time: ",
+                          str(estimate_runtime(n / runs_number, start_time)))
 
         env.close()
 
