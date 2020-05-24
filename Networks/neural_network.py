@@ -1,12 +1,7 @@
 from network_model import NetworkModel
 from typing import List
-<<<<<<< HEAD
 from activation import Activation
 from losses import Loss
-=======
-from activation import Activation, Sigmoid
-from losses import Loss, MSE
->>>>>>> see before
 import numpy as np
 from layer import Dense
 
@@ -15,11 +10,7 @@ class NeuralNetwork(NetworkModel):
     def __init__(self, layers_num: List[int], activations: List[Activation], loss_func: Loss, lr: float, min_init_weight=-0.5, max_init_weight=0.5):
         self.layers = []
         for i in range(len(layers_num) - 1):
-<<<<<<< HEAD
             self.layers.append(Dense(layers_num[i], layers_num[i+1], activations[i], min_init_weight=min_init_weight, max_init_weight=max_init_weight))
-=======
-            self.layers.append(Dense(layers_num[i], layers_num[i+1], activations[i], min_init_weight, max_init_weight))
->>>>>>> see before
         self.loss_function = loss_func
         self.lr = lr
         self.layers_numbers = layers_num
@@ -29,13 +20,8 @@ class NeuralNetwork(NetworkModel):
             data = layer.feed_forward(data)
         return data
 
-<<<<<<< HEAD
-    def train(self, my_input: np.ndarray, labels: np.ndarray):
-        data = my_input
-=======
-    def train(self, net_input: np.ndarray, labels: np.ndarray, vanish_grad=False):
+    def train(self, net_input: np.ndarray, labels: np.ndarray):
         data = net_input
->>>>>>> see before
         layer_outputs = []
         for layer in self.layers:
             # feed forward for layers

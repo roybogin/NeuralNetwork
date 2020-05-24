@@ -31,14 +31,12 @@ class DQN:
         states_next = np.asarray([self.experience['s2'][i] for i in ids], dtype=np.int16)
         dones = np.asarray([self.experience['done'][i] for i in ids], dtype=np.int16)
         # predict by target network
-        value_next = np.max(target_net.predict(states_next), axis=1)
+        value_next = target_net.predict(states_next)[np.arange(self.batch_size), np.argmax(self.predict(states_next), axis=1)]
         # actual values by bellman equation
         actual_values = np.where(dones, rewards, rewards+self.gamma*value_next)
         prediction = self.predict(states)
-        prediction_list = []
-        for i in range(self.batch_size):
-            prediction_list.append(prediction[i][actions[i]])
-            prediction[i][actions[i]] = actual_values[i]
+        prediction_list = list(prediction[np.arange(self.batch_size), actions])
+        prediction[np.arange(self.batch_size), actions] = actual_values
         # train training network
         self.model.train(states, prediction)
         loss = self.loss_function.calculate(np.atleast_2d(np.array(prediction_list)).T, np.atleast_2d(np.array(actual_values)).T)

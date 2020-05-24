@@ -19,7 +19,7 @@ def main():
     host = "127.0.0.1"
     port = 2000
     env = SocketEnv(host, port)
-    folder_name = "two_hidden_new_loss"
+    folder_name = "ddqn"
     saving_path = "saved_data/" + folder_name
     dir_num = len([d for d in os.listdir(saving_path) if os.path.isdir(saving_path + "/" + d)])  # number of existing directories (to add another)
     take_from = saving_path + "/" + str(dir_num-1)  # directory to take data from
@@ -34,10 +34,10 @@ def main():
     decay = 0.9999  # epsilon decay
     min_epsilon = 0.01
     batch_size = 700
-    lr = 0.002
+    lr = 0.005
     calculation_step = 1000  # step for calculating the data for the plot
     monitoring_step = 20    # step to show info on console
-    runs_number = int(8e5)  # how many runs to do
+    runs_number = int(3e5)  # how many runs to do
     train_from_start = False    # training from start or file
     estimate_time = True    # estimate time to end or show monitoring
 
