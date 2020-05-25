@@ -1,6 +1,6 @@
 from Networks.dqn import DQN
 from Networks.neural_network import NeuralNetwork
-from losses import SSE
+from losses import SSE, MSE
 from activation import Linear, Tanh
 from env import SocketEnv, Env
 import numpy as np
@@ -11,14 +11,12 @@ from statistics import mean
 import pickle as pkl
 import os
 
-wins = 0
-
 
 def main():
-    global wins
     host = "127.0.0.1"
     port = 2000
     env = SocketEnv(host, port)
+    wins = 0    # how many wins in last calculation step
     folder_name = "ddqn"
     saving_path = "saved_data/" + folder_name
     dir_num = len([d for d in os.listdir(saving_path) if os.path.isdir(saving_path + "/" + d)])  # number of existing directories (to add another)
@@ -34,10 +32,10 @@ def main():
     decay = 0.9999  # epsilon decay
     min_epsilon = 0.01
     batch_size = 700
-    lr = 0.005
+    lr = 5e-4
     calculation_step = 1000  # step for calculating the data for the plot
-    monitoring_step = 20    # step to show info on console
-    runs_number = int(3e5)  # how many runs to do
+    monitoring_step = 10    # step to show info on console
+    runs_number = int(2e5)  # how many runs to do
     train_from_start = False    # training from start or file
     estimate_time = True    # estimate time to end or show monitoring
 
@@ -70,7 +68,7 @@ def main():
             start_time = datetime.datetime.now()
         for n in range(runs_number):
             epsilon = max(min_epsilon, epsilon * decay)
-            total_reward, ep_losses, wins, end_board = play_game(env, train_net, target_net, epsilon, copy_step, wins, is_legal_move=is_legal_move) # play a game
+            total_reward, ep_losses, wins, end_board = play_game(env, train_net, target_net, epsilon, copy_step, wins) # play a game
             total_rewards[n] = total_reward
             total_losses[n] = ep_losses
             total_reveal_percent[n] = board_percent_revealed(end_board)
@@ -84,7 +82,7 @@ def main():
                 episode_list.append(n)
                 avg_rwd_list.append(avg_rewards)
                 losses_list.append(avg_losses)
-                wins = 0
+                wins = 0    # reset wins
                 target_net.model.save_weights(saving_path, "weights.npy", "biases.npy")
                 with open(saving_path + "/epsilon.txt", "w") as f:
                     f.write(str(epsilon))
@@ -156,26 +154,23 @@ def main():
         plt.show()
 
 
-def play_game(env: Env, train_net: DQN, target_net: DQN, epsilon: float, copy_step: int, wins: int, is_legal_move=None, info=lambda: None):
+def play_game(env: Env, train_net: DQN, target_net: DQN, epsilon: float, copy_step: int, wins: int):
     rewards = 0
     iter = 0
     done = False
-    observations = env.reset()
+    observation = env.reset()
     losses = list()
     while not done:
         # select legal move
-        if is_legal_move is None:
-            action = train_net.get_action(observations, epsilon)
-        else:
-            action = train_net.get_legal_action(observations, epsilon, is_legal_move)
-        prev_observations = observations
-        observations, reward, done, did_win = env.step(action)
+        action = train_net.get_legal_action(observation, epsilon, is_legal_move)
+        prev_observation = observation
+        observation, reward, done, did_win = env.step(action)
         if did_win:
             wins += 1
         rewards += reward
         if done:
             env.reset()
-        exp = {'s': prev_observations, 'a': action, 'r': reward, 's2': observations, 'done': done}
+        exp = {'s': prev_observation, 'a': action, 'r': reward, 's2': observation, 'done': done}
         # add experience for replay
         train_net.add_experience(exp)
         loss = train_net.train(target_net)
@@ -184,7 +179,7 @@ def play_game(env: Env, train_net: DQN, target_net: DQN, epsilon: float, copy_st
         if iter % copy_step == 0:
             # copy weights between networks
             target_net.model.layers = copy.deepcopy(train_net.model.layers)
-    return rewards, mean(losses), wins, observations
+    return rewards, mean(losses), wins, observation
 
 
 def board_percent_revealed(board: np.ndarray):
