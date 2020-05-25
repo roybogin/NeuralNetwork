@@ -2,7 +2,6 @@ import abc
 import numpy as np
 from activation import Activation
 from losses import Loss
-from typing import List
 
 
 class Layer(abc.ABC):

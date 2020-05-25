@@ -1,4 +1,4 @@
-from Networks.dqn import DQN
+from Networks.ddqn import DDQN
 from Networks.neural_network import NeuralNetwork
 from losses import SSE, MSE
 from activation import Linear, Tanh
@@ -39,7 +39,7 @@ def main():
     train_from_start = False    # training from start or file
     estimate_time = True    # estimate time to end or show monitoring
 
-    train_net = DQN(NeuralNetwork(layers, [Tanh, Tanh, Linear], loss_function, lr), layers[-1], loss_function, gamma, max_experiences, min_experiences, batch_size)
+    train_net = DDQN(NeuralNetwork(layers, [Tanh, Tanh, Linear], loss_function, lr), layers[-1], loss_function, gamma, max_experiences, min_experiences, batch_size)
 
     if dir_num == 0:    # if there are no data directories you have to train from start
         train_from_start = True
@@ -154,7 +154,7 @@ def main():
         plt.show()
 
 
-def play_game(env: Env, train_net: DQN, target_net: DQN, epsilon: float, copy_step: int, wins: int):
+def play_game(env: Env, train_net: DDQN, target_net: DDQN, epsilon: float, copy_step: int, wins: int):
     rewards = 0
     iter = 0
     done = False

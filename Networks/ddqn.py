@@ -2,10 +2,9 @@ from network_model import NetworkModel
 import numpy as np
 from typing import List, Callable
 from losses import Loss
-from statistics import mean
 
 
-class DQN:
+class DDQN:
     def __init__(self, model: NetworkModel, num_actions: int, loss_func: Loss, gamma: float, max_experiences: int,
                  min_experiences: int, batch_size: int):
         self.model = model
