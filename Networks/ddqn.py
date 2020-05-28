@@ -30,7 +30,7 @@ class DDQN:
         rewards = np.asarray([self.experience['r'][i] for i in ids], dtype=np.int16)
         states_next = np.asarray([self.experience['s2'][i] for i in ids], dtype=np.int16)
         dones = np.asarray([self.experience['done'][i] for i in ids], dtype=np.int16)
-        # predict by target network
+        # predict by ddqn
         value_next = target_net.predict(states_next)[self.arange, np.argmax(self.predict(states_next), axis=1)]
         # actual values by bellman equation
         actual_values = np.where(dones, rewards, rewards+self.gamma*value_next)

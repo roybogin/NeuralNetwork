@@ -34,8 +34,8 @@ def main():
     batch_size = 700
     lr = 5e-4
     calculation_step = 1000  # step for calculating the data for the plot
-    monitoring_step = 10    # step to show info on console
-    runs_number = int(2e5)  # how many runs to do
+    monitoring_step = 30    # step to show info on console
+    runs_number = int(7e5)  # how many runs to do
     train_from_start = False    # training from start or file
     estimate_time = True    # estimate time to end or show monitoring
 
@@ -149,6 +149,9 @@ def main():
 
         with open(saving_path + "/reveals.txt", "w") as f:
             f.write(str(reveal_list))
+
+        with open(saving_path + "/info.txt", "w") as f:
+            f.write("lr: " + str(lr) + "    runs: " + str(n))
 
         pkl.dump(fig, open(saving_path + "/plot.p", 'wb'))
         plt.show()

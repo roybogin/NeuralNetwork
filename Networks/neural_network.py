@@ -1,7 +1,7 @@
 from network_model import NetworkModel
 from typing import List
-from activation import Activation
-from losses import Loss
+from activation import Activation, Sigmoid
+from losses import Loss, MSE
 import numpy as np
 from layer import Dense
 
