@@ -1,6 +1,6 @@
 from Networks.ddqn import DDQN
 from Networks.neural_network import NeuralNetwork
-from losses import SSE, MSE
+from losses import SSE
 from activation import Linear, Tanh
 from env import SocketEnv, Env
 import numpy as np
