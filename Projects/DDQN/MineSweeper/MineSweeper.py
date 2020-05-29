@@ -32,10 +32,10 @@ def main():
     decay = 0.9999  # epsilon decay
     min_epsilon = 0.01
     batch_size = 700
-    lr = 5e-4
+    lr = 6e-4
     calculation_step = 1000  # step for calculating the data for the plot
     monitoring_step = 30    # step to show info on console
-    runs_number = int(7e5)  # how many runs to do
+    runs_number = int(2e5)  # how many runs to do
     train_from_start = False    # training from start or file
     estimate_time = True    # estimate time to end or show monitoring
 
