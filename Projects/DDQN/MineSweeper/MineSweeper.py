@@ -32,10 +32,10 @@ def main():
     decay = 0.9999  # epsilon decay
     min_epsilon = 0.01
     batch_size = 700
-    lr = 6e-4
+    lr = 4e-4
     calculation_step = 1000  # step for calculating the data for the plot
     monitoring_step = 30    # step to show info on console
-    runs_number = int(2e5)  # how many runs to do
+    runs_number = int(5e5)  # how many runs to do
     train_from_start = False    # training from start or file
     estimate_time = True    # estimate time to end or show monitoring
 
@@ -92,13 +92,9 @@ def main():
                     avg_rewards = total_rewards[max(0, n - calculation_step):(n + 1)].mean()
                     avg_losses = total_losses[max(0, n - calculation_step):(n + 1)].mean()
                     avg_reveal_percents = total_reveal_percent[max(0, n - calculation_step):(n + 1)].mean()
-                    print("episode:", n, "episode reward:", total_reward, "eps:", epsilon, "avg reward (last",
-                          str(calculation_step) + "):", avg_rewards,
-                          "avg loss (last", str(calculation_step) + "):", avg_losses, "last", calculation_step,
-                          "episodes wins: ", wins, "avg revealed percent:", avg_reveal_percents)
+                    print(f"episode: {n} episode reward: {total_reward} eps: {epsilon} avg reward (last {calculation_step}): {avg_rewards} avg loss (last {calculation_step}): {avg_losses} last {calculation_step} episodes wins: {wins} avg revealed percent: {avg_reveal_percents}")
                 else:
-                    print("plays percentage: ", str(100 * n / runs_number) + "%   estimated time: ",
-                          str(estimate_runtime(n / runs_number, start_time)))
+                    print(f"plays percentage: {100 * n / runs_number}%   estimated time: {estimate_runtime(n/runs_number, start_time)}")
 
         env.close()
 
@@ -116,22 +112,22 @@ def main():
         avg_rwd_list.append(avg_rewards)
         losses_list.append(avg_losses)
 
-        print("avg reward for last", calculation_step, "episodes:", avg_rewards)
-        print("total win percent", (np.sum(np.array(win_list)))/n)
+        print(f"avg reward for last {calculation_step} episodes: {avg_rewards}")
+        print(f"total win percent: {np.sum(np.array(win_list))/n}")
 
         # plot
         fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2)
         ax1.plot(episode_list, avg_rwd_list)
-        ax1.set(xlabel="episode", ylabel="avg reward last " + str(calculation_step))
+        ax1.set(xlabel="episode", ylabel=f"avg reward last {calculation_step}")
 
         ax2.plot(episode_list, losses_list)
-        ax2.set(xlabel="episode", ylabel="avg loss last " + str(calculation_step))
+        ax2.set(xlabel="episode", ylabel=f"avg loss last {calculation_step}")
 
         ax3.plot(episode_list, win_list)
-        ax3.set(xlabel="episode", ylabel="wins last " + str(calculation_step))
+        ax3.set(xlabel="episode", ylabel=f"wins last {calculation_step}")
 
         ax4.plot(episode_list, reveal_list)
-        ax4.set(xlabel="episode", ylabel="avg percent board last " + str(calculation_step))
+        ax4.set(xlabel="episode", ylabel=f"avg percent board last {calculation_step}")
 
         target_net.model.save_weights(saving_path, "weights.npy", "biases.npy")
 
@@ -151,7 +147,7 @@ def main():
             f.write(str(reveal_list))
 
         with open(saving_path + "/info.txt", "w") as f:
-            f.write("lr: " + str(lr) + "    runs: " + str(n))
+            f.write(f"lr: {lr}    runs: {n+1}")
 
         pkl.dump(fig, open(saving_path + "/plot.p", 'wb'))
         plt.show()
