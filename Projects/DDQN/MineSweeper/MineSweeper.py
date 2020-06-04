@@ -30,12 +30,12 @@ def main():
     max_experiences = 20000
     min_experiences = 1000
     decay = 0.9999  # epsilon decay
-    min_epsilon = 0.01
+    min_epsilon = 7e-3  # 7e-3
     batch_size = 700
-    lr = 4e-4
+    lr = 5e-4
     calculation_step = 1000  # step for calculating the data for the plot
     monitoring_step = 30    # step to show info on console
-    runs_number = int(5e5)  # how many runs to do
+    runs_number = int(8e5)  # how many runs to do
     train_from_start = False    # training from start or file
     estimate_time = True    # estimate time to end or show monitoring
 
@@ -94,7 +94,7 @@ def main():
                     avg_reveal_percents = total_reveal_percent[max(0, n - calculation_step):(n + 1)].mean()
                     print(f"episode: {n} episode reward: {total_reward} eps: {epsilon} avg reward (last {calculation_step}): {avg_rewards} avg loss (last {calculation_step}): {avg_losses} last {calculation_step} episodes wins: {wins} avg revealed percent: {avg_reveal_percents}")
                 else:
-                    print(f"plays percentage: {100 * n / runs_number}%   estimated time: {estimate_runtime(n/runs_number, start_time)}")
+                    print(f"plays percentage: {100 * n / runs_number:.3f}%   estimated time: {estimate_runtime(n/runs_number, start_time)}")
 
         env.close()
 

@@ -1,7 +1,7 @@
 from network_model import NetworkModel
 from typing import List
-from activation import Activation, Sigmoid
-from losses import Loss, MSE
+from activation import Activation, Sigmoid, Linear, Tanh
+from losses import Loss, MSE, SSE
 import numpy as np
 from layer import Dense
 
@@ -55,7 +55,7 @@ class NeuralNetwork(NetworkModel):
 
 
 def main():
-    nn = NeuralNetwork([2, 4, 1], [Sigmoid, Sigmoid], MSE, 0.1)
+    nn = NeuralNetwork([2, 4, 1], [Sigmoid, Sigmoid], SSE, 0.1)
     data = np.array([
         [0, 1],
         [0, 0],
@@ -69,9 +69,8 @@ def main():
         [1]
     ])
     print(nn.predict(data))
-    for i in range(20000):
+    for i in range(50000):
         nn.train(data, labels)
-        print(MSE.calculate(nn.predict(data), labels))
     print(nn.predict(data))
 
 
