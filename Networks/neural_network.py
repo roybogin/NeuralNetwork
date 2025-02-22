@@ -42,13 +42,15 @@ class NeuralNetwork(NetworkModel):
         for layer in self.layers:
             all_weights.append(layer.get_weights())
             all_biases.append(layer.get_biases())
-        np.save(path + "/" + weights_file, all_weights, allow_pickle=True)
-        np.save(path + "/" + bias_file, all_biases, allow_pickle=True)
+        np.savez(path + "/" + weights_file, *all_weights)
+        np.savez(path + "/" + bias_file, *all_biases)
 
     def load_weights(self, path: str, weights_file: str, bias_file: str):
         # load weights from file
-        all_weights = np.load(path + "/" + weights_file, allow_pickle=True)
-        all_biases = np.load(path + "/" + bias_file, allow_pickle=True)
+        all_weights = np.load(path + "/" + weights_file)
+        all_biases = np.load(path + "/" + bias_file)
+        all_weights = list(all_weights.values())
+        all_biases = list(all_biases.values())
         for layer in range(len(self.layers)):
             self.layers[layer].set_weights(all_weights[layer])
             self.layers[layer].set_biases(all_biases[layer])

@@ -1,3 +1,7 @@
+import sys, os
+import traceback
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..')))
+
 from Networks.ddqn import DDQN
 from Networks.neural_network import NeuralNetwork
 from losses import SSE
@@ -45,7 +49,7 @@ def main():
         train_from_start = True
 
     if not train_from_start:
-        train_net.model.load_weights(take_from, "weights.npy", "biases.npy")
+        train_net.model.load_weights(take_from, "weights.npz", "biases.npz")
     target_net = copy.deepcopy(train_net)
 
     episode_list = []
@@ -83,7 +87,7 @@ def main():
                 avg_rwd_list.append(avg_rewards)
                 losses_list.append(avg_losses)
                 wins = 0    # reset wins
-                target_net.model.save_weights(saving_path, "weights.npy", "biases.npy")
+                target_net.model.save_weights(saving_path, "weights", "biases")
                 with open(saving_path + "/epsilon.txt", "w") as f:
                     f.write(str(epsilon))
             if n % monitoring_step == 0:
@@ -98,8 +102,10 @@ def main():
 
         env.close()
 
-    except:  # if code is stopped at the middle, still calculate data and show plot
-        pass
+    except Exception as e:  # if code is stopped at the middle, still calculate data and show plot
+        print("="*25)
+        traceback.print_exc()
+        print("="*25)
 
     finally:
         # calculate end of data
@@ -129,7 +135,7 @@ def main():
         ax4.plot(episode_list, reveal_list)
         ax4.set(xlabel="episode", ylabel=f"avg percent board last {calculation_step}")
 
-        target_net.model.save_weights(saving_path, "weights.npy", "biases.npy")
+        target_net.model.save_weights(saving_path, "weights", "biases")
 
         with open(saving_path + "/epsilon.txt", "w") as f:
             f.write(str(epsilon))
